@@ -5,31 +5,31 @@ networks:
 services:
   postgres:
     image: postgres:15
-    container_name: postgres
+    container_name: n8n_sql
     restart: unless-stopped
     environment:
       POSTGRES_USER: n8n
       POSTGRES_PASSWORD: n8npass
       POSTGRES_DB: n8n
     volumes:
-      - /mnt/docker-root/n8n/postgres:/var/lib/postgresql/data
+      - ./volumenes/postgres:/var/lib/postgresql/data
     networks:
       - ai-net
 
   qdrant:
     image: qdrant/qdrant:v1.12.5
-    container_name: qdrant
+    container_name: n8n_qdrant
     restart: unless-stopped
     ports:
       - "6333:6333"
     volumes:
-      - /mnt/docker-root/n8n/qdrant:/qdrant/storage
+      - ./volumenes/qdrant:/qdrant/storage
     networks:
       - ai-net
 
   n8n:
     image: n8nio/n8n:latest
-    container_name: n8n
+    container_name: n8n_ever
     restart: unless-stopped
     ports:
       - "5678:5678"
@@ -41,31 +41,45 @@ services:
       DB_POSTGRESDB_USER: n8n
       DB_POSTGRESDB_PASSWORD: n8npass
 
-      # OPENAI
+      N8N_ENDPOINT_WEBHOOK: "webhook"
+      N8N_ENDPOINT_WEBHOOK_TEST: "webhook-test"
+
+      N8N_SECURITY_ALLOWED_ORIGINS: "*"     # <--- ESTA es la que funciona hoy
+      N8N_SECURITY_ALLOWED_METHODS: "GET, POST, OPTIONS"
+      N8N_SECURITY_ALLOWED_HEADERS: "*"
+      N8N_SECURITY_ALLOW_CORS: "*"
+      N8N_SECURITY_ALLOW_ORIGIN: "*"
+      N8N_SECURITY_ALLOW_HEADERS: "*"
+
       OPENAI_API_KEY: ${OPENAI_API_KEY}
 
-      # IMPORTANTE: Para usar API REST desde frontend
       N8N_HOST: 0.0.0.0
       N8N_PORT: 5678
-      WEBHOOK_URL: http://n8n:5678
+      WEBHOOK_URL: http://localhost:5678
     depends_on:
       - postgres
       - qdrant
     networks:
       - ai-net
     volumes:
-      - /mnt/docker-root/n8n:/home/node/.n8n
+      - ./volumenes/n8n:/home/node/.n8n
+      - "Z:\\Empresa\\Everwear\\BBDD:/data_bbdd"
+
+
+
 
   frontend:
     build: ./frontend
-    container_name: chat_ui
+    container_name: n8n_front
     ports:
       - "5050:5050"
     networks:
       - ai-net
     environment:
+      N8N_WEBHOOK_URL: ${N8N_WEBHOOK_URL}
       N8N_URL: http://n8n:5678
       OPENAI_MODEL: gpt-4o
     volumes:
-      - /mnt/docker-root/n8n/frontend:/app
-    command: sh -c "pnpm install && pnpm run dev -- --host 0.0.0.0"
+      - ./frontend:/app    # ✔ monta TU código real
+      - /app/node_modules  # ✔ evita que node_modules sea pisado
+    command: ["pnpm", "dev", "--host"]
