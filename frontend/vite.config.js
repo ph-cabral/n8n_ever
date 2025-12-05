@@ -11,6 +11,8 @@ export default defineConfig({
       interval: 100,
     },
     hmr: {
+      host: 'mari.ever',
+      port: 5050,
       overlay: false,
     },
   },

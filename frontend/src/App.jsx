@@ -10,7 +10,7 @@ function App() {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  const url = "http://localhost:5678/webhook/prueba";
+  const url = "http://mari.ever/webhook/ever";
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -39,9 +39,8 @@ function App() {
         message: userMessage.content,
         conversationHistory: messages,
       });
-      console.log(response)
-
-      const content =
+    
+    const content =
         typeof response.data === "string"
           ? response.data
           : response.data?.data ??
