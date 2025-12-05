@@ -8,13 +8,21 @@ services:
     container_name: n8n_sql
     restart: unless-stopped
     environment:
-      POSTGRES_USER: n8n
-      POSTGRES_PASSWORD: n8npass
-      POSTGRES_DB: n8n
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
-      - ./volumenes/postgres:/var/lib/postgresql/data
+      - /mnt/docker/volumes/postgres_data:/var/lib/postgresql/data
     networks:
       - ai-net
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-n8n} -d ${POSTGRES_DB:-n8n}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   qdrant:
     image: qdrant/qdrant:v1.12.5
@@ -22,48 +30,63 @@ services:
     restart: unless-stopped
     ports:
       - "6333:6333"
+      - "6334:6334"
     volumes:
-      - ./volumenes/qdrant:/qdrant/storage
+      - /mnt/docker/volumes/qdrant_data:/qdrant/storage
     networks:
       - ai-net
+    environment:
+      QDRANT__LOG_LEVEL: INFO
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:6333/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
 
   n8n:
     image: n8nio/n8n:latest
     container_name: n8n_ever
     restart: unless-stopped
+    user: "1000:1000" 
     ports:
       - "5678:5678"
     environment:
       DB_TYPE: postgresdb
-      DB_POSTGRESDB_HOST: postgres
-      DB_POSTGRESDB_PORT: 5432
-      DB_POSTGRESDB_DATABASE: n8n
-      DB_POSTGRESDB_USER: n8n
-      DB_POSTGRESDB_PASSWORD: n8npass
+      DB_POSTGRESDB_HOST: ${POSTGRES_HOST}
+      DB_POSTGRESDB_PORT: ${POSTGRES_PORT}
+      DB_POSTGRESDB_DATABASE: ${POSTGRES_DB}
+      DB_POSTGRESDB_USER: ${POSTGRES_USER}
+      DB_POSTGRESDB_PASSWORD: ${POSTGRES_PASSWORD}
 
       N8N_ENDPOINT_WEBHOOK: "webhook"
       N8N_ENDPOINT_WEBHOOK_TEST: "webhook-test"
 
-      N8N_SECURITY_ALLOWED_ORIGINS: "*"     # <--- ESTA es la que funciona hoy
-      N8N_SECURITY_ALLOWED_METHODS: "GET, POST, OPTIONS"
-      N8N_SECURITY_ALLOWED_HEADERS: "*"
-      N8N_SECURITY_ALLOW_CORS: "*"
-      N8N_SECURITY_ALLOW_ORIGIN: "*"
-      N8N_SECURITY_ALLOW_HEADERS: "*"
+      N8N_CORS_ALLOW_ORIGIN: "*"
+      N8N_ALLOWED_ORIGINS: "*"
 
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
+#      N8N_SECURITY_ALLOWED_ORIGINS: "*"     # <--- ESTA es la que funciona hoy
+#      N8N_SECURITY_ALLOWED_METHODS: "GET, POST, OPTIONS"
+#      N8N_SECURITY_ALLOWED_HEADERS: "*"
+#      N8N_SECURITY_ALLOW_CORS: "*"
+#      N8N_SECURITY_ALLOW_ORIGIN: "*"
+#      N8N_SECURITY_ALLOW_HEADERS: "*"
+
+      OPENAI_API_KEY: ${MAMMOUTH_API_KEY}
 
       N8N_HOST: 0.0.0.0
       N8N_PORT: 5678
-      WEBHOOK_URL: http://localhost:5678
+      N8N_PROTOCOL: http
+      WEBHOOK_URL: ${WEBHOOK_URL:-http://localhost:5678}
     depends_on:
-      - postgres
-      - qdrant
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
     networks:
       - ai-net
     volumes:
-      - ./volumenes/n8n:/home/node/.n8n
-      - "Z:\\Empresa\\Everwear\\BBDD:/data_bbdd"
+      - /mnt/docker/volumes/n8n_data:/home/node/.n8n
 
 
 
@@ -71,15 +94,32 @@ services:
   frontend:
     build: ./frontend
     container_name: n8n_front
+    restart: unless-stopped
     ports:
       - "5050:5050"
     networks:
       - ai-net
     environment:
-      N8N_WEBHOOK_URL: ${N8N_WEBHOOK_URL}
+      N8N_WEBHOOK_URL: ${VITE_N8N_WEBHOOK_URL}
       N8N_URL: http://n8n:5678
-      OPENAI_MODEL: gpt-4o
+      MAMMOUTH_MODEL: ${MAMMOUTH_MODEL}
+      NODE_ENV: ${NODE_ENV}
     volumes:
       - ./frontend:/app    # ✔ monta TU código real
       - /app/node_modules  # ✔ evita que node_modules sea pisado
     command: ["pnpm", "dev", "--host"]
+    depends_on:
+      - n8n
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - ai-net
+    depends_on:
+      - frontend
