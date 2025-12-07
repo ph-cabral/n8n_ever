@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+.pnpm-store
 
 # Editor directories and files
 .vscode/*
@@ -22,3 +23,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+volumenes
+.env
+.env.save
+docker-compose.yml
+

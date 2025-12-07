@@ -48,7 +48,7 @@ services:
     image: n8nio/n8n:latest
     container_name: n8n_ever
     restart: unless-stopped
-    user: "1000:1000" 
+    user: "1000:1000"
     ports:
       - "5678:5678"
     environment:
@@ -65,19 +65,12 @@ services:
       N8N_CORS_ALLOW_ORIGIN: "*"
       N8N_ALLOWED_ORIGINS: "*"
 
-#      N8N_SECURITY_ALLOWED_ORIGINS: "*"     # <--- ESTA es la que funciona hoy
-#      N8N_SECURITY_ALLOWED_METHODS: "GET, POST, OPTIONS"
-#      N8N_SECURITY_ALLOWED_HEADERS: "*"
-#      N8N_SECURITY_ALLOW_CORS: "*"
-#      N8N_SECURITY_ALLOW_ORIGIN: "*"
-#      N8N_SECURITY_ALLOW_HEADERS: "*"
-
-      OPENAI_API_KEY: ${MAMMOUTH_API_KEY}
+      MAMMOUTH_API_KEY: ${MAMMOUTH_API_KEY}
 
       N8N_HOST: 0.0.0.0
       N8N_PORT: 5678
       N8N_PROTOCOL: http
-      WEBHOOK_URL: ${WEBHOOK_URL:-http://localhost:5678}
+      WEBHOOK_URL: ${WEBHOOK_URL}
     depends_on:
       postgres:
         condition: service_healthy
