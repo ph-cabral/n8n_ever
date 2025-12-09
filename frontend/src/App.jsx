@@ -1,6 +1,11 @@
 import axios from "axios";
 import { useState, useRef, useEffect } from "react";
 import { Send, MessageSquare, User, Bot } from "lucide-react";
+import { parseN8nResponse } from "./utils/responsePorser";
+import FormattedMessage from "./components/FormattedMessage";
+import ThemeToggle from "./components/ThemeToggle";
+import { useTheme } from "./hooks/useTheme";
+import ChatContainer from "./components/Chat/ChatContainer";
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -10,7 +15,7 @@ function App() {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  const url = "http://mari.ever/webhook/ever";
+  const url = import.meta.env.VITE_N8N_WEBHOOK_URL;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -39,14 +44,8 @@ function App() {
         message: userMessage.content,
         conversationHistory: messages,
       });
-    
-    const content =
-        typeof response.data === "string"
-          ? response.data
-          : response.data?.data ??
-            response.data?.message ??
-            response.data?.response ??
-            "Sin respuesta";
+
+      const content = parseN8nResponse(response.data);
 
       const assistantMessage = {
         role: "assistant",
@@ -63,7 +62,6 @@ function App() {
         : `Error de conexión: ${err.message}`;
 
       setError(msg);
-
       setMessages((prev) => prev.slice(0, -1));
     } finally {
       setIsLoading(false);
@@ -90,6 +88,7 @@ function App() {
     <div className="app-container">
       <div className="chat-container">
         {/* Header */}
+      <ThemeToggle />
         <div className="chat-header">
           <div className="header-left">
             <div className="header-icon">
@@ -109,9 +108,6 @@ function App() {
             <div className="welcome-message">
               <h2>👋 ¡Hola! Soy tu asistente n8n</h2>
               <p>Preguntame lo que necesites y te ayudaré.</p>
-              <p
-                style={{ marginTop: "20px", fontSize: "13px", opacity: 0.7 }}
-              ></p>
             </div>
           ) : (
             messages.map((msg, idx) => (
@@ -120,7 +116,11 @@ function App() {
                   {msg.role === "user" ? <User size={20} /> : <Bot size={20} />}
                 </div>
                 <div className="message-content">
-                  {msg.content}
+                  {msg.role === "assistant" ? (
+                    <FormattedMessage content={msg.content} />
+                  ) : (
+                    <p>{msg.content}</p>
+                  )}
                   <div className="message-time">
                     {formatTime(msg.timestamp)}
                   </div>
