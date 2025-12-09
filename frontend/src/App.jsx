@@ -88,8 +88,8 @@ function App() {
     <div className="app-container">
       <div className="chat-container">
         {/* Header */}
-      <ThemeToggle />
         <div className="chat-header">
+      <ThemeToggle />
           <div className="header-left">
             <div className="header-icon">
               <Bot size={20} />

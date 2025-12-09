@@ -4,28 +4,23 @@
 
 :root {
   /* Modo Claro Suave */
-  --bg-primary: #F0EDD5; /* El color final del gradiente como fondo */
+  --bg-primary: linear-gradient(135deg, #bcb87b 0%, #385888 100%);;
   --bg-secondary: #ffffff;
   --bg-tertiary: #e9ecef;
-  --grad-start: #2A7B9B;
-  --grad-mid: #57C785;
-  --grad-end: #F0EDD5;
-  
-  --text-on-gradient: #ffffff; /* Texto sobre gradiente */
 
   --text-primary: #212529;
-  --text-secondary: #fff;
+  --text-secondary: #495057;
   --text-tertiary: #6c757d;
 
-  --border-color: #4c7fb1;
+  --border-color: #dee2e6;
   --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
 
   /* Mensajes */
-  --msg-user-bg: #93ea95;
-  --msg-user-text: #212529;
-  --msg-assistant-bg: #3b82f6;
-  --msg-assistant-text: #ffffff;
+  --msg-user-bg: #3b82f6;
+  --msg-user-text: #ffffff;
+  --msg-assistant-bg: #ffffff;
+  --msg-assistant-text: #212529;
   --msg-assistant-border: #dee2e6;
 
   /* Código */
