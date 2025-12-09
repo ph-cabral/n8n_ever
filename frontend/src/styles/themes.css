@@ -4,7 +4,7 @@
 
 :root {
   /* Modo Claro Suave */
-  --bg-primary: linear-gradient(135deg, #bcb87b 0%, #385888 100%);;
+  --bg-primary: linear-gradient(135deg, #bbb896 0%, #d17d39 100%);;
   --bg-secondary: #ffffff;
   --bg-tertiary: #e9ecef;
 
@@ -65,7 +65,8 @@
    ============================================ */
 
 [data-theme="dark"] {
-  --bg-primary: #0a0e1a;
+  --bg-primary: #0a0e1a ;
+  --bg-primary: linear-gradient(135deg, #bcb87b 0%, #385888 100%);;
   --bg-secondary: #1a1f35;
   --bg-tertiary: #2a2f45;
 
