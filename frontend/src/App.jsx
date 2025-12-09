@@ -94,7 +94,7 @@ function App() {
             <div className="header-icon">
               <Bot size={20} />
             </div>
-            <h1>n8n Assistant</h1>
+            <h1>MARI</h1>
           </div>
           <div className="status-badge">
             <div className="status-dot"></div>

@@ -1,9 +1,22 @@
+import { useState, useEffect } from "react";
 import { Sun, Moon } from "lucide-react";
-import { useTheme } from "../hooks/useTheme";
-// import "../styles/theme-toggle.css";
+import "../styles/theme-toggle.css";
 
 const ThemeToggle = () => {
-  const { theme, toggleTheme } = useTheme();
+  const [theme, setTheme] = useState(() => {
+    // Leer del localStorage o usar 'light' por defecto
+    return localStorage.getItem("theme") || "light";
+  });
+
+  useEffect(() => {
+    // Aplicar el tema al document
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+  };
 
   return (
     <button

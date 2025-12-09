@@ -1,26 +1,29 @@
+/* src/styles/theme-toggle.css */
 .theme-toggle {
   position: fixed;
   top: 1.5rem;
   right: 1.5rem;
-  width: 48px;
-  height: 48px;
+  z-index: 9999;
+  
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  background: var(--bg-secondary);
-  border: 2px solid var(--border-color);
-  color: var(--text-primary);
-  cursor: pointer;
+  border: 2px solid var(--bs-border-color, #dee2e6);
+  background: var(--bs-body-bg, #fff);
+  color: var(--bs-body-color, #212529);
+  
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  
   transition: all 0.3s ease;
-  box-shadow: var(--shadow);
-  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .theme-toggle:hover {
-  transform: scale(1.1) rotate(15deg);
-  box-shadow: var(--shadow-hover);
-  border-color: var(--accent-primary);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .theme-toggle:active {

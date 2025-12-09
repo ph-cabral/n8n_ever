@@ -27,5 +27,7 @@ dist-ssr
 volumenes
 .env
 .env.save
+.env.ex
+.env.prod
 docker-compose.yml
 
