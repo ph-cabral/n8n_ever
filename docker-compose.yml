@@ -4,34 +4,40 @@ networks:
 
 volumes:
   postgres_data:
-    driver: local
     name: postgres_data
   n8n_data:
-    driver: local
     name: n8n_data
   qdrant_data:
-    driver: local
     name: qdrant_data
-  frontend_node_modules:  # ← ✅ AGREGAR ESTO
-    driver: local
-    name: frontend_node_modules
+  nginx_data:
+    name: nginx_data
 
 services:
+
+##########################################################################
+
   postgres:
-    image: postgres:15
+    image: postgres:15-alpine
     container_name: n8n_sql
     restart: unless-stopped
     environment:
-      POSTGRES_HOST: ${POSTGRES_HOST}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
-      - ./volumenes/postgres:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - ai-net
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+##########################################################################
 
   qdrant:
     image: qdrant/qdrant:v1.12.5
@@ -40,12 +46,15 @@ services:
     ports:
       - "6333:6333"
       - "6334:6334"
+    environment:
+      - QDRANT__SERVICE__HTTP_PORT=6333
+      - QDRANT__SERVICE__GRPC_PORT=6334
     volumes:
-      - ./volumenes/qdrant:/qdrant/storage
+      - qdrant_data:/qdrant/storage
     networks:
       - ai-net
-    environment:
-      QDRANT__LOG_LEVEL: INFO
+
+##########################################################################
 
   n8n:
     image: n8nio/n8n:latest
@@ -54,55 +63,80 @@ services:
     ports:
       - "5678:5678"
     environment:
-      DB_TYPE: postgresdb
-      DB_POSTGRESDB_HOST: ${POSTGRES_HOST}
-      DB_POSTGRESDB_PORT: ${POSTGRES_PORT}
-      DB_POSTGRESDB_DATABASE: ${POSTGRES_DB}
-      DB_POSTGRESDB_USER: ${POSTGRES_USER}
-      DB_POSTGRESDB_PASSWORD: ${POSTGRES_PASSWORD}
-      N8N_ENDPOINT_WEBHOOK: webhook
-      N8N_ENDPOINT_WEBHOOK_TEST: webhook-test
-      N8N_SECURITY_ALLOWED_ORIGINS: "*"
-      N8N_SECURITY_ALLOWED_METHODS: "GET, POST, OPTIONS"
-      N8N_SECURITY_ALLOWED_HEADERS: "*"
-      N8N_SECURITY_ALLOW_CORS: "*"
-      N8N_SECURITY_ALLOW_ORIGIN: "*"
-      N8N_SECURITY_ALLOW_HEADERS: "*"
-      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: true
-      MAMMOUTH_API_KEY: ${MAMMOUTH_API_KEY}
-      N8N_HOST: 0.0.0.0
-      N8N_PORT: 5678
-      WEBHOOK_URL: ${WEBHOOK_URL}
-      N8N_EDITOR_BASE_URL: ${WEBHOOK_URL}
-      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
+      # N8N_EDITOR_BASE_URL: http://mari.ever
+      # N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
+      # N8N_CORS_ALLOWED_ORIGINS: http://mari.ever,http://localhost:5050
+      # === CONFIGURACIÓN BÁSICA ===
+      - N8N_HOST=0.0.0.0  
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - N8N_PATH=/n8n/
+      - N8N_EDITOR_BASE_URL=https://mari.ever/n8n/
+      - WEBHOOK_URL=https://mari.ever/webhook/n8n/
+      - VUE_APP_URL_BASE_API=https://mari.ever/n8n/
+
+      # === WEBSOCKET (CRÍTICO) ===
+      - N8N_PUSH_BACKEND=websocket   
+
+      # === SEGURIDAD - DESACTIVAR COOKIE SEGURA PARA HTTP ===
+      - N8N_SECURE_COOKIE=false 
+      
+      # === BASE DE DATOS ===
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=${POSTGRES_DB}
+      - DB_POSTGRESDB_USER=${POSTGRES_USER}
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
+      
+      # === NUEVAS VARIABLES RECOMENDADAS ===
+      - N8N_RUNNERS_ENABLED=true                      # ✅ Habilitar task runners
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=false            # ✅ Permitir acceso a variables de entorno
+      - N8N_GIT_NODE_DISABLE_BARE_REPOS=true          # ✅ Deshabilitar repos bare (seguridad)
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true 
+      - N8N_BASIC_AUTH_ACTIVE=false
+      - N8N_METRICS=false   # ✅ Forzar permisos correctos
+      
+      # === SEGURIDAD ===
+      - N8N_BASIC_AUTH_ACTIVE=false
+      - N8N_METRICS=false
+            # === CORS (desarrollo) ===
+      - N8N_CORS_ENABLED=true
+      - N8N_CORS_ORIGIN=*
+      
+    volumes:
+      - n8n_data:/home/node/.n8n
     depends_on:
-      - postgres
-      - qdrant
+      postgres:
+        condition: service_healthy
     networks:
       - ai-net
-    volumes:
-      - ./volumenes/n8n:/home/node/.n8n
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:5678/healthz || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  
+##########################################################################
 
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     container_name: n8n_front
     restart: unless-stopped
     ports:
-      - "5050:5050"
+      - "5050:80"
     networks:
       - ai-net
     environment:
-      VITE_N8N_WEBHOOK_URL: ${VITE_N8N_WEBHOOK_URL:-http://localhost:5678/webhook/ever}
-      VITE_API_TIMEOUT: 100000
-      NODE_ENV: development
-    volumes:
-      - ./frontend:/app
-      - frontend_node_modules:/app/node_modules  # ← ✅ CAMBIAR ESTO
-    command: ["pnpm", "dev", "--host", "0.0.0.0"]
+      - VITE_N8N_URL=https://mari.ever/n8n
+      - VITE_QDRANT_URL=https://mari.ever/qdrant
+      - VITE_N8N_WEBHOOK_URL= ${VITE_N8N_WEBHOOK_URL}
     depends_on:
       - n8n
+
+##########################################################################
 
   nginx:
     image: nginx:alpine
@@ -110,8 +144,10 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro
     networks:
       - ai-net
     depends_on:
