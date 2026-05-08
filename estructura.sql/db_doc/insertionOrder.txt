@@ -1,0 +1,7 @@
+usuario
+candidato
+documento_aprobado
+documento_chunk
+documento_staging
+rag_consulta
+documento_rechazado

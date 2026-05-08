@@ -6,9 +6,9 @@
 export const parseN8nResponse = (data) => {
   // Caso 1: Array de objetos
   if (Array.isArray(data)) {
-    if (data.length === 0) return "Sin respuesta del servidor";
+    if (data.length === 0) return "Sin respuesta del servidor"
 
-    const first = data[0];
+    const first = data[0]
     return (
       first?.output ||
       first?.message ||
@@ -16,7 +16,7 @@ export const parseN8nResponse = (data) => {
       first?.content ||
       first?.response ||
       JSON.stringify(first)
-    );
+    )
   }
 
   // Caso 2: Objeto con propiedades conocidas
@@ -30,14 +30,14 @@ export const parseN8nResponse = (data) => {
       data.data?.output ||
       data.data?.message ||
       JSON.stringify(data)
-    );
+    )
   }
 
   // Caso 3: String directo
   if (typeof data === "string") {
-    return data;
+    return data
   }
 
   // Fallback
-  return String(data) || "Respuesta no válida";
-};
+  return String(data) || "Respuesta no válida"
+}

@@ -15,11 +15,11 @@ export const testMarkdownParsing = () => {
       input: "Línea 1\\n\\nLínea 2",
       expected: "Debe haber espacio entre líneas",
     },
-  ];
+  ]
 
   testCases.forEach((test) => {
-    console.log(`\n📝 Test: ${test.name}`);
-    console.log(`Input: "${test.input}"`);
-    console.log(`Esperado: ${test.expected}`);
-  });
-};
+    console.log(`\n📝 Test: ${test.name}`)
+    console.log(`Input: "${test.input}"`)
+    console.log(`Esperado: ${test.expected}`)
+  })
+}

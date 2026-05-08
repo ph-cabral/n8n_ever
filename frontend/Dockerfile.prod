@@ -1,21 +1,36 @@
-FROM node:20-alpine
+# Stage 1: Build
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
 # Instalar pnpm
 RUN npm install -g pnpm
 
-# Copiar archivos de configuración
+# Copiar dependencias
 COPY package.json pnpm-lock.yaml ./
-
-# Instalar dependencias
 RUN pnpm install --frozen-lockfile
 
-# Copiar código (se sobrescribirá con volume)
+# Copiar código y compilar
 COPY . .
+ARG VITE_N8N_WEBHOOK_URL
+ENV VITE_N8N_WEBHOOK_URL=${VITE_N8N_WEBHOOK_URL}
 
-# Exponer puerto de Vite
-EXPOSE 5050
+RUN pnpm build
 
-# Ejecutar servidor de desarrollo
-CMD ["pnpm", "dev", "--host", "0.0.0.0", "--port", "5050"]
+# Stage 2: Runtime (solo archivos estáticos)
+FROM nginx:alpine
+
+# Copiar build
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Configuración nginx básica
+RUN echo 'server { \
+    listen 80; \
+    root /usr/share/nginx/html; \
+    index index.html; \
+    location / { \
+        try_files $uri $uri/ /index.html; \
+    } \
+}' > /etc/nginx/conf.d/default.conf
+
+EXPOSE 80

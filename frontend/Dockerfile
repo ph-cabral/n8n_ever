@@ -1,12 +1,21 @@
-FROM node:20
+FROM node:20-alpine
 
 WORKDIR /app
 
-RUN npm install -g pnpm
+# Instalar pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
+# Copiar archivos de dependencias
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install
 
+# Instalar dependencias
+RUN pnpm install --frozen-lockfile
+
+# Copiar código fuente
+COPY . .
+
+# Exponer puerto
 EXPOSE 5050
 
-CMD ["pnpm", "dev", "--host"]
+# Comando de desarrollo
+CMD ["pnpm", "dev", "--host", "0.0.0.0"]

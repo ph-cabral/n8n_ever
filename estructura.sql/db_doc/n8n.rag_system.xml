@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="n8n" schema="rag_system" type="PostgreSQL - 15.15 (Debian 15.15-1.pgdg12+1)">
+   <sequences>
+      <sequence increment="1" name="candidato_id_seq" startValue="1"/>
+      <sequence increment="1" name="documento_aprobado_id_seq" startValue="1"/>
+      <sequence increment="1" name="documento_chunk_id_seq" startValue="1"/>
+      <sequence increment="1" name="documento_rechazado_id_seq" startValue="1"/>
+      <sequence increment="1" name="documento_staging_id_seq" startValue="1"/>
+      <sequence increment="1" name="rag_consulta_id_seq" startValue="1"/>
+      <sequence increment="1" name="usuario_id_seq" startValue="1"/>
+   </sequences>
+   <tables>
+      <table name="candidato" remarks="" schema="rag_system" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('candidato_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4">
+            <child column="candidato_id" foreignKey="documento_aprobado_candidato_id_fkey" implied="false" onDeleteCascade="false" schema="rag_system" table="documento_aprobado"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="nombre" nullable="true" remarks="" size="100" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="apellido" nullable="true" remarks="" size="100" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="email" nullable="true" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="telefono" nullable="true" remarks="" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="'{}'::jsonb" digits="0" id="5" name="perfil" nullable="true" remarks="" size="2147483647" type="jsonb" typeCode="1111"/>
+         <column autoUpdated="false" defaultValue="'NUEVO'::character varying" digits="0" id="6" name="estado_seleccion" nullable="true" remarks="" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="fuente_original" nullable="true" remarks="" size="100" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="8" name="created_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="9" name="updated_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="gen_random_uuid()" digits="0" id="10" name="candidato_uuid" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="candidato_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="candidato_email_key" unique="true">
+            <column ascending="true" name="email"/>
+         </index>
+         <index name="idx_candidato_email" unique="false">
+            <column ascending="true" name="email"/>
+         </index>
+         <index name="idx_candidato_perfil" unique="false">
+            <column ascending="true" name="perfil"/>
+         </index>
+         <index name="idx_candidato_uuid" unique="true">
+            <column ascending="true" name="candidato_uuid"/>
+         </index>
+      </table>
+      <table name="documento_aprobado" numRows="12" remarks="" schema="rag_system" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('documento_aprobado_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4">
+            <child column="documento_id" foreignKey="documento_chunk_documento_id_fkey" implied="false" onDeleteCascade="true" schema="rag_system" table="documento_chunk"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="tipo_documento" nullable="false" remarks="" size="2147483647" type="tipo_documento" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="dominio" nullable="false" remarks="" size="2147483647" type="dominio_documento" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="hash_archivo" nullable="false" remarks="" size="64" type="bpchar" typeCode="1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="nombre_archivo" nullable="false" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="texto_limpio" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="'{}'::jsonb" digits="0" id="6" name="datos_estructurados" nullable="true" remarks="" size="2147483647" type="jsonb" typeCode="1111"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="candidato_id" nullable="true" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="documento_aprobado_candidato_id_fkey" implied="false" onDeleteCascade="false" schema="rag_system" table="candidato"/>
+         </column>
+         <column autoUpdated="false" defaultValue="'{}'::jsonb" digits="0" id="8" name="metadata" nullable="true" remarks="" size="2147483647" type="jsonb" typeCode="1111"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="9" name="embeddings_generados" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="10" name="indexado_en_qdrant" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="qdrant_collection" nullable="true" remarks="" size="100" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="aprobado_por" nullable="true" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="documento_aprobado_aprobado_por_fkey" implied="false" onDeleteCascade="false" schema="rag_system" table="usuario"/>
+         </column>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="13" name="aprobado_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="'application/pdf'::character varying" digits="0" id="14" name="mime_type" nullable="false" remarks="" size="100" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="0" digits="0" id="15" name="tamanio_bytes" nullable="false" remarks="" size="19" type="int8" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="16" name="texto_raw" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="'UPLOAD_WEB'::fuente_ingesta" digits="0" id="17" name="fuente" nullable="false" remarks="" size="2147483647" type="fuente_ingesta" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="18" name="creado_por" nullable="true" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="documento_aprobado_creado_por_fkey" implied="false" onDeleteCascade="false" schema="rag_system" table="usuario"/>
+         </column>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="19" name="created_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="gen_random_uuid()" digits="0" id="20" name="documento_uuid" nullable="true" remarks="" size="2147483647" type="uuid" typeCode="1111"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="documento_aprobado_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="documento_aprobado_hash_archivo_key" unique="true">
+            <column ascending="true" name="hash_archivo"/>
+         </index>
+         <index name="idx_aprobado_candidato" unique="false">
+            <column ascending="true" name="candidato_id"/>
+         </index>
+         <index name="idx_aprobado_tipo" unique="false">
+            <column ascending="true" name="tipo_documento"/>
+         </index>
+      </table>
+      <table name="documento_chunk" remarks="" schema="rag_system" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('documento_chunk_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="documento_id" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="documento_chunk_documento_id_fkey" implied="false" onDeleteCascade="true" schema="rag_system" table="documento_aprobado"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="contenido" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="posicion" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="'{}'::jsonb" digits="0" id="4" name="metadata" nullable="true" remarks="" size="2147483647" type="jsonb" typeCode="1111"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="embedding_generado" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="qdrant_point_id" nullable="true" remarks="" size="100" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="7" name="created_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="documento_uuid" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111"/>
+         <column autoUpdated="false" defaultValue="gen_random_uuid()" digits="0" id="9" name="chunk_uuid" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="documento_chunk_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="idx_chunk_doc" unique="false">
+            <column ascending="true" name="documento_id"/>
+         </index>
+         <index name="idx_chunk_documento_uuid" unique="false">
+            <column ascending="true" name="documento_uuid"/>
+         </index>
+         <index name="idx_chunk_metadata" unique="false">
+            <column ascending="true" name="metadata"/>
+         </index>
+         <index name="idx_chunk_uuid" unique="true">
+            <column ascending="true" name="chunk_uuid"/>
+         </index>
+         <index name="uq_doc_chunk" unique="true">
+            <column ascending="true" name="documento_id"/>
+            <column ascending="true" name="posicion"/>
+         </index>
+      </table>
+      <table name="documento_rechazado" remarks="" schema="rag_system" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('documento_rechazado_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="hash_archivo" nullable="false" remarks="" size="64" type="bpchar" typeCode="1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="nombre_archivo" nullable="false" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="mime_type" nullable="false" remarks="" size="100" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="tamanio_bytes" nullable="false" remarks="" size="19" type="int8" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="texto_raw" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="texto_limpio" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="tipo_preliminar" nullable="true" remarks="" size="2147483647" type="tipo_documento" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="dominio_preliminar" nullable="true" remarks="" size="2147483647" type="dominio_documento" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="2" id="9" name="confianza_clasificacion" nullable="true" remarks="" size="3" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="motivo_rechazo" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="'{}'::jsonb" digits="0" id="11" name="metadata" nullable="true" remarks="" size="2147483647" type="jsonb" typeCode="1111"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="fuente" nullable="false" remarks="" size="2147483647" type="fuente_ingesta" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="13" name="creado_por" nullable="true" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="documento_rechazado_creado_por_fkey" implied="false" onDeleteCascade="false" schema="rag_system" table="usuario"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="14" name="rechazado_por" nullable="true" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="documento_rechazado_rechazado_por_fkey" implied="false" onDeleteCascade="false" schema="rag_system" table="usuario"/>
+         </column>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="15" name="created_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="16" name="rechazado_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="documento_rechazado_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="documento_rechazado_hash_archivo_key" unique="true">
+            <column ascending="true" name="hash_archivo"/>
+         </index>
+         <index name="idx_rechazado_fecha" unique="false">
+            <column ascending="true" name="rechazado_at"/>
+         </index>
+         <index name="idx_rechazado_hash" unique="false">
+            <column ascending="true" name="hash_archivo"/>
+         </index>
+      </table>
+      <table name="documento_staging" numRows="12" remarks="" schema="rag_system" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('documento_staging_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="tipo_preliminar" nullable="true" remarks="" size="2147483647" type="tipo_documento" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="dominio_preliminar" nullable="true" remarks="" size="2147483647" type="dominio_documento" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="2" id="3" name="confianza_clasificacion" nullable="true" remarks="" size="3" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="'PENDIENTE'::estado_documento" digits="0" id="4" name="estado" nullable="false" remarks="" size="2147483647" type="estado_documento" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="hash_archivo" nullable="false" remarks="" size="64" type="bpchar" typeCode="1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="nombre_archivo" nullable="false" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="mime_type" nullable="false" remarks="" size="100" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="tamanio_bytes" nullable="false" remarks="" size="19" type="int8" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="texto_raw" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="texto_limpio" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="'{}'::jsonb" digits="0" id="11" name="metadata" nullable="true" remarks="" size="2147483647" type="jsonb" typeCode="1111"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="fuente" nullable="false" remarks="" size="2147483647" type="fuente_ingesta" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="13" name="creado_por" nullable="true" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="documento_staging_creado_por_fkey" implied="false" onDeleteCascade="false" schema="rag_system" table="usuario"/>
+         </column>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="14" name="created_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="15" name="procesado_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="16" name="error_procesamiento" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="17" name="documento_aprobado_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="18" name="updated_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="gen_random_uuid()" digits="0" id="19" name="documento_uuid" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="documento_staging_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="documento_staging_hash_archivo_key" unique="true">
+            <column ascending="true" name="hash_archivo"/>
+         </index>
+         <index name="idx_documento_staging_uuid" unique="true">
+            <column ascending="true" name="documento_uuid"/>
+         </index>
+         <index name="idx_staging_estado" unique="false">
+            <column ascending="true" name="estado"/>
+         </index>
+         <index name="idx_staging_hash" unique="false">
+            <column ascending="true" name="hash_archivo"/>
+         </index>
+      </table>
+      <table name="rag_consulta" remarks="" schema="rag_system" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('rag_consulta_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="query_original" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="query_procesado" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="usuario_id" nullable="true" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="rag_consulta_usuario_id_fkey" implied="false" onDeleteCascade="false" schema="rag_system" table="usuario"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="chunks_recuperados" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="candidatos_retornados" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="respuesta_generada" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="latencia_ms" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="tokens_usados" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="9" name="created_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="rag_consulta_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="idx_rag_fecha" unique="false">
+            <column ascending="false" name="created_at"/>
+         </index>
+         <index name="idx_rag_usuario" unique="false">
+            <column ascending="true" name="usuario_id"/>
+         </index>
+      </table>
+      <table name="usuario" remarks="" schema="rag_system" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('usuario_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4">
+            <child column="aprobado_por" foreignKey="documento_aprobado_aprobado_por_fkey" implied="false" onDeleteCascade="false" schema="rag_system" table="documento_aprobado"/>
+            <child column="creado_por" foreignKey="documento_aprobado_creado_por_fkey" implied="false" onDeleteCascade="false" schema="rag_system" table="documento_aprobado"/>
+            <child column="creado_por" foreignKey="documento_rechazado_creado_por_fkey" implied="false" onDeleteCascade="false" schema="rag_system" table="documento_rechazado"/>
+            <child column="rechazado_por" foreignKey="documento_rechazado_rechazado_por_fkey" implied="false" onDeleteCascade="false" schema="rag_system" table="documento_rechazado"/>
+            <child column="creado_por" foreignKey="documento_staging_creado_por_fkey" implied="false" onDeleteCascade="false" schema="rag_system" table="documento_staging"/>
+            <child column="usuario_id" foreignKey="rag_consulta_usuario_id_fkey" implied="false" onDeleteCascade="false" schema="rag_system" table="rag_consulta"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="username" nullable="false" remarks="" size="100" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="email" nullable="true" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="true" digits="0" id="3" name="activo" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="now()" digits="6" id="4" name="created_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="usuario_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="usuario_username_key" unique="true">
+            <column ascending="true" name="username"/>
+         </index>
+      </table>
+      <table name="v_candidatos_completos" numRows="0" remarks="" schema="rag_system" type="VIEW" viewSql=" SELECT c.id,&#10;    c.nombre,&#10;    c.apellido,&#10;    c.email,&#10;    c.perfil,&#10;    count(da.id) AS documentos_aprobados,&#10;    max(da.aprobado_at) AS ultimo_documento&#10;   FROM (candidato c&#10;     LEFT JOIN documento_aprobado da ON ((c.id = da.candidato_id)))&#10;  GROUP BY c.id;">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="nombre" nullable="true" remarks="" size="100" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="apellido" nullable="true" remarks="" size="100" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="email" nullable="true" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="perfil" nullable="true" remarks="" size="2147483647" type="jsonb" typeCode="1111"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="documentos_aprobados" nullable="true" remarks="" size="19" type="int8" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="6" name="ultimo_documento" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+      </table>
+      <table name="v_docs_pendientes" numRows="0" remarks="" schema="rag_system" type="VIEW" viewSql=" SELECT documento_staging.id,&#10;    documento_staging.nombre_archivo,&#10;    documento_staging.tipo_preliminar,&#10;    documento_staging.dominio_preliminar,&#10;    documento_staging.confianza_clasificacion,&#10;    documento_staging.estado,&#10;    documento_staging.created_at,&#10;    (EXTRACT(epoch FROM (now() - (documento_staging.created_at)::timestamp with time zone)) / (3600)::numeric) AS horas_esperando&#10;   FROM documento_staging&#10;  WHERE (documento_staging.estado = ANY (ARRAY['PENDIENTE'::estado_documento, 'PROCESANDO'::estado_documento]))&#10;  ORDER BY documento_staging.created_at;">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="nombre_archivo" nullable="true" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="tipo_preliminar" nullable="true" remarks="" size="2147483647" type="tipo_documento" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="dominio_preliminar" nullable="true" remarks="" size="2147483647" type="dominio_documento" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="2" id="4" name="confianza_clasificacion" nullable="true" remarks="" size="3" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="estado" nullable="true" remarks="" size="2147483647" type="estado_documento" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="6" name="created_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="horas_esperando" nullable="true" remarks="" size="0" type="numeric" typeCode="2"/>
+      </table>
+   </tables>
+</database>

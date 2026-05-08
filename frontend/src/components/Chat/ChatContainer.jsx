@@ -1,6 +1,6 @@
-import { useState, useRef, useCallback, memo } from 'react';
-import FormattedMessage from '../FormattedMessage';
-import ChatInput from './ChatInpit';
+import { useState, useRef, useCallback, memo } from 'react'
+import FormattedMessage from '../FormattedMessage'
+import ChatInput from './ChatInpit'
 
 // 🔥 Memoizar cada mensaje individual
 const MessageItem = memo(({ msg, formatTime }) => {
@@ -13,75 +13,75 @@ const MessageItem = memo(({ msg, formatTime }) => {
                 </div>
             </div>
         </div>
-    );
+    )
 }, (prevProps, nextProps) => {
     // Solo re-renderizar si cambió el mensaje
     return (
         prevProps.msg.id === nextProps.msg.id &&
         prevProps.msg.content === nextProps.msg.content
-    );
-});
+    )
+})
 
-MessageItem.displayName = 'MessageItem';
+MessageItem.displayName = 'MessageItem'
 
 const ChatContainer = () => {
-    const [messages, setMessages] = useState([]);
-    const [input, setInput] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const inputRef = useRef(null);
+    const [messages, setMessages] = useState([])
+    const [input, setInput] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
+    const inputRef = useRef(null)
 
     // 🔥 Memoizar función de formateo
     const formatTime = useCallback((timestamp) => {
         return new Date(timestamp).toLocaleTimeString('es-ES', {
             hour: '2-digit',
             minute: '2-digit',
-        });
-    }, []);
+        })
+    }, [])
 
     // 🔥 Memoizar handler de input (evita recrear función)
     const handleInputChange = useCallback((e) => {
-        setInput(e.target.value);
-    }, []);
+        setInput(e.target.value)
+    }, [])
 
     const handleSend = async () => {
-        if (!input.trim() || isLoading) return;
+        if (!input.trim() || isLoading) return
 
         const userMessage = {
             id: Date.now(),
             role: 'user',
             content: input.trim(),
             timestamp: Date.now(),
-        };
+        }
 
-        setMessages(prev => [...prev, userMessage]);
-        setInput('');
-        setIsLoading(true);
+        setMessages(prev => [...prev, userMessage])
+        setInput('')
+        setIsLoading(true)
 
         try {
-            const response = await sendMessage(input.trim(), sessionId);
+            const response = await sendMessage(input.trim(), sessionId)
 
             const botMessage = {
                 id: Date.now() + 1,
                 role: 'assistant',
                 content: response.output || response.message || 'Sin respuesta',
                 timestamp: Date.now(),
-            };
+            }
 
-            setMessages(prev => [...prev, botMessage]);
+            setMessages(prev => [...prev, botMessage])
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error:', error)
             // Manejo de errores...
         } finally {
-            setIsLoading(false);
+            setIsLoading(false)
         }
-    };
+    }
 
     const handleKeyDown = useCallback((e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleSend();
+            e.preventDefault()
+            handleSend()
         }
-    }, [input, isLoading]); // 🔥 Dependencias necesarias
+    }, [input, isLoading]) // 🔥 Dependencias necesarias
 
     return (
         <div className="chat-container">
@@ -133,7 +133,7 @@ const ChatContainer = () => {
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default ChatContainer;
+export default ChatContainer

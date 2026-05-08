@@ -1,22 +1,22 @@
-import React, { memo } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import "../styles/message-formatting.css";
+import React, { memo } from "react"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
+import "../styles/message-formatting.css"
 
 // 🔥 MEMOIZAR para evitar re-renders innecesarios
 const FormattedMessage = memo(
   ({ content }) => {
     const preprocessContent = (text) => {
-      if (!text) return "";
+      if (!text) return ""
 
-      let processed = text.replace(/\\n/g, "\n");
-      processed = processed.replace(/^(#{1,6})(\S)/gm, "$1 $2");
-      processed = processed.replace(/^-(\S)/gm, "- $1");
+      let processed = text.replace(/\\n/g, "\n")
+      processed = processed.replace(/^(#{1,6})(\S)/gm, "$1 $2")
+      processed = processed.replace(/^-(\S)/gm, "- $1")
 
-      return processed;
-    };
+      return processed
+    }
 
-    const processedContent = preprocessContent(content);
+    const processedContent = preprocessContent(content)
 
     // 🔥 Memoizar los componentes personalizados
     const components = React.useMemo(
@@ -38,10 +38,10 @@ const FormattedMessage = memo(
         ),
         code: ({ inline, className, children }) => {
           if (inline) {
-            return <code className="inline-code">{children}</code>;
+            return <code className="inline-code">{children}</code>
           }
 
-          const language = className?.replace("language-", "") || "plaintext";
+          const language = className?.replace("language-", "") || "plaintext"
           return (
             <pre className="code-block">
               <div className="code-header">
@@ -49,7 +49,7 @@ const FormattedMessage = memo(
               </div>
               <code className={className}>{children}</code>
             </pre>
-          );
+          )
         },
         strong: ({ children }) => (
           <strong className="formatted-bold">{children}</strong>
@@ -76,7 +76,7 @@ const FormattedMessage = memo(
         hr: () => <hr className="formatted-divider" />,
       }),
       []
-    ); // 🔥 Array vacío = se crea solo una vez
+    ) // 🔥 Array vacío = se crea solo una vez
 
     return (
       <div className="formatted-message">
@@ -84,14 +84,14 @@ const FormattedMessage = memo(
           {processedContent}
         </ReactMarkdown>
       </div>
-    );
+    )
   },
   (prevProps, nextProps) => {
     // 🔥 Solo re-renderizar si el contenido cambió
-    return prevProps.content === nextProps.content;
+    return prevProps.content === nextProps.content
   }
-);
+)
 
-FormattedMessage.displayName = "FormattedMessage";
+FormattedMessage.displayName = "FormattedMessage"
 
-export default FormattedMessage;
+export default FormattedMessage

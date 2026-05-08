@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>n8n.rag_system</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="bower/admin-lte/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="bower/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="bower/ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
+        <!-- Code Mirror -->
+        <link rel="stylesheet" href="bower/codemirror/codemirror.css">
+        <!-- Fonts -->
+        <link href='fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
+        <link href='fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="bower/admin-lte/dist/css/AdminLTE.min.css">
+        <!-- Salvattore -->
+        <link rel="stylesheet" href="bower/salvattore/salvattore.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+           folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="bower/admin-lte/dist/css/skins/_all-skins.min.css">
+        <!-- SchemaSpy -->
+        <link rel="stylesheet" href="schemaSpy.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="bower/html5shiv/html5shiv.min.js"></script>
+        <script src="bower/respond/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a href="index.html" class="navbar-brand"><b>n8n</b></a><span class="navbar-brand" style="padding-left: 0">.rag_system</span>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="index.html">Tables <span class="sr-only">(current)</span></a></li>
+                                <li><a href="columns.html" title="All of the columns in the schema">Columns</a></li>
+                                <li><a href="constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
+                                <li><a href="relationships.html" title="Diagram of table relationships">Relationships</a></li>
+                                <li><a href="orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
+                                <li><a href="anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+                                <li><a href="routines.html" title="Procedures and functions">Routines</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                        <!-- Navbar Right Menu -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+            <!-- Main content -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>Columns</h1>
+                </section>
+                <!-- Main content -->
+                <section class="content">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                            <h3 class="box-title">Columns</h3>
+                        </div>
+                        <div class="box-body">
+                            <table
+                                    id="column_table"
+                                    class="table table-bordered table-striped dataTable"
+                                    role="grid"
+                                    data-paging="true"
+                                    data-page-length="50"
+                                    data-length-change="false">
+                                <thead align='left'>
+                                    <tr>
+                                        <th>Table</th>
+                                        <th>Type</th>
+                                        <th>Column</th>
+                                        <th>Type</th>
+                                        <th>Size</th>
+                                        <th title='Are nulls allowed?'>Nullable</th>
+                                        <th title='Is column automatically updated?'>Auto</th>
+                                        <th title='Default value'>Default</th>
+                                        <th title='Comments' class="toggle"><span>Comments</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                <script>
+                    var tableData = [
+    {
+        "tableName": "candidato",
+        "tableFileName": "candidato",
+        "tableType": "Table",
+        "keyClass": "primaryKey",
+        "keyTitle": "Primary Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id",
+        "type": "serial",
+        "length": 10,
+        "nullable": "",
+        "autoUpdated": "√",
+        "defaultValue": "nextval('candidato_id_seq'::regclass)",
+        "comments": ""
+    },
+    {
+        "tableName": "candidato",
+        "tableFileName": "candidato",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "nombre",
+        "type": "varchar",
+        "length": 100,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "candidato",
+        "tableFileName": "candidato",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "apellido",
+        "type": "varchar",
+        "length": 100,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "candidato",
+        "tableFileName": "candidato",
+        "tableType": "Table",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>email",
+        "type": "varchar",
+        "length": 255,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "candidato",
+        "tableFileName": "candidato",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "telefono",
+        "type": "varchar",
+        "length": 50,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "candidato",
+        "tableFileName": "candidato",
+        "tableType": "Table",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>perfil",
+        "type": "jsonb",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "'{}'::jsonb",
+        "comments": ""
+    },
+    {
+        "tableName": "candidato",
+        "tableFileName": "candidato",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "estado_seleccion",
+        "type": "varchar",
+        "length": 50,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "'NUEVO'::character varying",
+        "comments": ""
+    },
+    {
+        "tableName": "candidato",
+        "tableFileName": "candidato",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "fuente_original",
+        "type": "varchar",
+        "length": 100,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "candidato",
+        "tableFileName": "candidato",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "now()",
+        "comments": ""
+    },
+    {
+        "tableName": "candidato",
+        "tableFileName": "candidato",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "now()",
+        "comments": ""
+    },
+    {
+        "tableName": "candidato",
+        "tableFileName": "candidato",
+        "tableType": "Table",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>candidato_uuid",
+        "type": "uuid",
+        "length": 2147483647,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "gen_random_uuid()",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "primaryKey",
+        "keyTitle": "Primary Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id",
+        "type": "serial",
+        "length": 10,
+        "nullable": "",
+        "autoUpdated": "√",
+        "defaultValue": "nextval('documento_aprobado_id_seq'::regclass)",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>tipo_documento",
+        "type": "tipo_documento",
+        "length": 2147483647,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "dominio",
+        "type": "dominio_documento",
+        "length": 2147483647,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>hash_archivo",
+        "type": "bpchar",
+        "length": 64,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "nombre_archivo",
+        "type": "varchar",
+        "length": 255,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "texto_limpio",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "datos_estructurados",
+        "type": "jsonb",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "'{}'::jsonb",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'></i>candidato_id",
+        "type": "int4",
+        "length": 10,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "metadata",
+        "type": "jsonb",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "'{}'::jsonb",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "embeddings_generados",
+        "type": "bool",
+        "length": 1,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "false",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "indexado_en_qdrant",
+        "type": "bool",
+        "length": 1,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "false",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "qdrant_collection",
+        "type": "varchar",
+        "length": 100,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'></i>aprobado_por",
+        "type": "int4",
+        "length": 10,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "aprobado_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "now()",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "mime_type",
+        "type": "varchar",
+        "length": 100,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "'application/pdf'::character varying",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "tamanio_bytes",
+        "type": "int8",
+        "length": 19,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "0",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "texto_raw",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "fuente",
+        "type": "fuente_ingesta",
+        "length": 2147483647,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "'UPLOAD_WEB'::fuente_ingesta",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'></i>creado_por",
+        "type": "int4",
+        "length": 10,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "now()",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_aprobado",
+        "tableFileName": "documento_aprobado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "documento_uuid",
+        "type": "uuid",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "gen_random_uuid()",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_chunk",
+        "tableFileName": "documento_chunk",
+        "tableType": "Table",
+        "keyClass": "primaryKey",
+        "keyTitle": "Primary Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id",
+        "type": "serial",
+        "length": 10,
+        "nullable": "",
+        "autoUpdated": "√",
+        "defaultValue": "nextval('documento_chunk_id_seq'::regclass)",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_chunk",
+        "tableFileName": "documento_chunk",
+        "tableType": "Table",
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'></i>documento_id",
+        "type": "int4",
+        "length": 10,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_chunk",
+        "tableFileName": "documento_chunk",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "contenido",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_chunk",
+        "tableFileName": "documento_chunk",
+        "tableType": "Table",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>posicion",
+        "type": "int4",
+        "length": 10,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_chunk",
+        "tableFileName": "documento_chunk",
+        "tableType": "Table",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>metadata",
+        "type": "jsonb",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "'{}'::jsonb",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_chunk",
+        "tableFileName": "documento_chunk",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "embedding_generado",
+        "type": "bool",
+        "length": 1,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "false",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_chunk",
+        "tableFileName": "documento_chunk",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "qdrant_point_id",
+        "type": "varchar",
+        "length": 100,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_chunk",
+        "tableFileName": "documento_chunk",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "now()",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_chunk",
+        "tableFileName": "documento_chunk",
+        "tableType": "Table",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>documento_uuid",
+        "type": "uuid",
+        "length": 2147483647,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_chunk",
+        "tableFileName": "documento_chunk",
+        "tableType": "Table",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>chunk_uuid",
+        "type": "uuid",
+        "length": 2147483647,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "gen_random_uuid()",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_rechazado",
+        "tableFileName": "documento_rechazado",
+        "tableType": "Table",
+        "keyClass": "primaryKey",
+        "keyTitle": "Primary Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id",
+        "type": "serial",
+        "length": 10,
+        "nullable": "",
+        "autoUpdated": "√",
+        "defaultValue": "nextval('documento_rechazado_id_seq'::regclass)",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_rechazado",
+        "tableFileName": "documento_rechazado",
+        "tableType": "Table",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>hash_archivo",
+        "type": "bpchar",
+        "length": 64,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_rechazado",
+        "tableFileName": "documento_rechazado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "nombre_archivo",
+        "type": "varchar",
+        "length": 255,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_rechazado",
+        "tableFileName": "documento_rechazado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "mime_type",
+        "type": "varchar",
+        "length": 100,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_rechazado",
+        "tableFileName": "documento_rechazado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "tamanio_bytes",
+        "type": "int8",
+        "length": 19,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_rechazado",
+        "tableFileName": "documento_rechazado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "texto_raw",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_rechazado",
+        "tableFileName": "documento_rechazado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "texto_limpio",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_rechazado",
+        "tableFileName": "documento_rechazado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "tipo_preliminar",
+        "type": "tipo_documento",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_rechazado",
+        "tableFileName": "documento_rechazado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "dominio_preliminar",
+        "type": "dominio_documento",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_rechazado",
+        "tableFileName": "documento_rechazado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "confianza_clasificacion",
+        "type": "numeric",
+        "length": 3,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_rechazado",
+        "tableFileName": "documento_rechazado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "motivo_rechazo",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_rechazado",
+        "tableFileName": "documento_rechazado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "metadata",
+        "type": "jsonb",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "'{}'::jsonb",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_rechazado",
+        "tableFileName": "documento_rechazado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "fuente",
+        "type": "fuente_ingesta",
+        "length": 2147483647,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_rechazado",
+        "tableFileName": "documento_rechazado",
+        "tableType": "Table",
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'></i>creado_por",
+        "type": "int4",
+        "length": 10,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_rechazado",
+        "tableFileName": "documento_rechazado",
+        "tableType": "Table",
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'></i>rechazado_por",
+        "type": "int4",
+        "length": 10,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_rechazado",
+        "tableFileName": "documento_rechazado",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "now()",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_rechazado",
+        "tableFileName": "documento_rechazado",
+        "tableType": "Table",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>rechazado_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "now()",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "primaryKey",
+        "keyTitle": "Primary Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id",
+        "type": "serial",
+        "length": 10,
+        "nullable": "",
+        "autoUpdated": "√",
+        "defaultValue": "nextval('documento_staging_id_seq'::regclass)",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "tipo_preliminar",
+        "type": "tipo_documento",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "dominio_preliminar",
+        "type": "dominio_documento",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "confianza_clasificacion",
+        "type": "numeric",
+        "length": 3,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>estado",
+        "type": "estado_documento",
+        "length": 2147483647,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "'PENDIENTE'::estado_documento",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>hash_archivo",
+        "type": "bpchar",
+        "length": 64,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "nombre_archivo",
+        "type": "varchar",
+        "length": 255,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "mime_type",
+        "type": "varchar",
+        "length": 100,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "tamanio_bytes",
+        "type": "int8",
+        "length": 19,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "texto_raw",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "texto_limpio",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "metadata",
+        "type": "jsonb",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "'{}'::jsonb",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "fuente",
+        "type": "fuente_ingesta",
+        "length": 2147483647,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'></i>creado_por",
+        "type": "int4",
+        "length": 10,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "now()",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "procesado_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "error_procesamiento",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "documento_aprobado_id",
+        "type": "int4",
+        "length": 10,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "now()",
+        "comments": ""
+    },
+    {
+        "tableName": "documento_staging",
+        "tableFileName": "documento_staging",
+        "tableType": "Table",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>documento_uuid",
+        "type": "uuid",
+        "length": 2147483647,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "gen_random_uuid()",
+        "comments": ""
+    },
+    {
+        "tableName": "rag_consulta",
+        "tableFileName": "rag_consulta",
+        "tableType": "Table",
+        "keyClass": "primaryKey",
+        "keyTitle": "Primary Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id",
+        "type": "serial",
+        "length": 10,
+        "nullable": "",
+        "autoUpdated": "√",
+        "defaultValue": "nextval('rag_consulta_id_seq'::regclass)",
+        "comments": ""
+    },
+    {
+        "tableName": "rag_consulta",
+        "tableFileName": "rag_consulta",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "query_original",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "rag_consulta",
+        "tableFileName": "rag_consulta",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "query_procesado",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "rag_consulta",
+        "tableFileName": "rag_consulta",
+        "tableType": "Table",
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'></i>usuario_id",
+        "type": "int4",
+        "length": 10,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "rag_consulta",
+        "tableFileName": "rag_consulta",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "chunks_recuperados",
+        "type": "_int4",
+        "length": 10,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "rag_consulta",
+        "tableFileName": "rag_consulta",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "candidatos_retornados",
+        "type": "_int4",
+        "length": 10,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "rag_consulta",
+        "tableFileName": "rag_consulta",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "respuesta_generada",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "rag_consulta",
+        "tableFileName": "rag_consulta",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "latencia_ms",
+        "type": "int4",
+        "length": 10,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "rag_consulta",
+        "tableFileName": "rag_consulta",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "tokens_usados",
+        "type": "int4",
+        "length": 10,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "rag_consulta",
+        "tableFileName": "rag_consulta",
+        "tableType": "Table",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>created_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "now()",
+        "comments": ""
+    },
+    {
+        "tableName": "usuario",
+        "tableFileName": "usuario",
+        "tableType": "Table",
+        "keyClass": "primaryKey",
+        "keyTitle": "Primary Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id",
+        "type": "serial",
+        "length": 10,
+        "nullable": "",
+        "autoUpdated": "√",
+        "defaultValue": "nextval('usuario_id_seq'::regclass)",
+        "comments": ""
+    },
+    {
+        "tableName": "usuario",
+        "tableFileName": "usuario",
+        "tableType": "Table",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>username",
+        "type": "varchar",
+        "length": 100,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "usuario",
+        "tableFileName": "usuario",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "email",
+        "type": "varchar",
+        "length": 255,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "usuario",
+        "tableFileName": "usuario",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "activo",
+        "type": "bool",
+        "length": 1,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "true",
+        "comments": ""
+    },
+    {
+        "tableName": "usuario",
+        "tableFileName": "usuario",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "now()",
+        "comments": ""
+    },
+    {
+        "tableName": "v_candidatos_completos",
+        "tableFileName": "v_candidatos_completos",
+        "tableType": "View",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "id",
+        "type": "int4",
+        "length": 10,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "v_candidatos_completos",
+        "tableFileName": "v_candidatos_completos",
+        "tableType": "View",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "nombre",
+        "type": "varchar",
+        "length": 100,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "v_candidatos_completos",
+        "tableFileName": "v_candidatos_completos",
+        "tableType": "View",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "apellido",
+        "type": "varchar",
+        "length": 100,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "v_candidatos_completos",
+        "tableFileName": "v_candidatos_completos",
+        "tableType": "View",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "email",
+        "type": "varchar",
+        "length": 255,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "v_candidatos_completos",
+        "tableFileName": "v_candidatos_completos",
+        "tableType": "View",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "perfil",
+        "type": "jsonb",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "v_candidatos_completos",
+        "tableFileName": "v_candidatos_completos",
+        "tableType": "View",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "documentos_aprobados",
+        "type": "int8",
+        "length": 19,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "v_candidatos_completos",
+        "tableFileName": "v_candidatos_completos",
+        "tableType": "View",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "ultimo_documento",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "v_docs_pendientes",
+        "tableFileName": "v_docs_pendientes",
+        "tableType": "View",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "id",
+        "type": "int4",
+        "length": 10,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "v_docs_pendientes",
+        "tableFileName": "v_docs_pendientes",
+        "tableType": "View",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "nombre_archivo",
+        "type": "varchar",
+        "length": 255,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "v_docs_pendientes",
+        "tableFileName": "v_docs_pendientes",
+        "tableType": "View",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "tipo_preliminar",
+        "type": "tipo_documento",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "v_docs_pendientes",
+        "tableFileName": "v_docs_pendientes",
+        "tableType": "View",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "dominio_preliminar",
+        "type": "dominio_documento",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "v_docs_pendientes",
+        "tableFileName": "v_docs_pendientes",
+        "tableType": "View",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "confianza_clasificacion",
+        "type": "numeric",
+        "length": 3,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "v_docs_pendientes",
+        "tableFileName": "v_docs_pendientes",
+        "tableType": "View",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "estado",
+        "type": "estado_documento",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "v_docs_pendientes",
+        "tableFileName": "v_docs_pendientes",
+        "tableType": "View",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "v_docs_pendientes",
+        "tableFileName": "v_docs_pendientes",
+        "tableType": "View",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "horas_esperando",
+        "type": "numeric",
+        "length": 0,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    }
+];
+                    var config = {
+                        pagination: true
+                    };
+                </script>
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
+                        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
+                    </div>
+                    <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 7.0.2</a></strong>
+                </div>
+                <!-- /.container -->
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery 2.2.3 -->
+        <script src="bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="bower/datatables.net/jquery.dataTables.min.js"></script>
+        <script src="bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
+        <script src="bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="bower/datatables.net-buttons/buttons.html5.min.js"></script>
+        <script src="bower/datatables.net-buttons/buttons.print.min.js"></script>
+        <script src="bower/datatables.net-buttons/buttons.colVis.min.js"></script>
+        <!-- SheetJS -->
+        <script src="bower/js-xlsx/xlsx.full.min.js"></script>
+        <!-- pdfmake -->
+        <script src="bower/pdfmake/pdfmake.min.js"></script>
+        <script src="bower/pdfmake/vfs_fonts.js"></script>
+        <!-- SlimScroll -->
+        <script src="bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="bower/admin-lte/plugins/fastclick/fastclick.js"></script>
+        <!-- Salvattore -->
+        <script src="bower/salvattore/salvattore.min.js"></script>
+        <!-- AnchorJS -->
+        <script src="bower/anchor-js/anchor.min.js"></script>
+        <!-- CodeMirror -->
+        <script src="bower/codemirror/codemirror.js"></script>
+        <script src="bower/codemirror/sql.js"></script>
+        <!-- AdminLTE App -->
+        <script src="bower/admin-lte/dist/js/app.min.js"></script>
+        <script src="column.js"></script>
+        <script src="schemaSpy.js"></script>
+    </body>
+</html>

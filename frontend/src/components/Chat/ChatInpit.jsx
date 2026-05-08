@@ -1,16 +1,16 @@
-import { memo, useCallback } from "react";
+import { memo, useCallback } from "react"
 
 const ChatInput = memo(
   ({ value, onChange, onSend, isLoading, inputRef }) => {
     const handleKeyDown = useCallback(
       (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-          onSend();
+          e.preventDefault()
+          onSend()
         }
       },
       [onSend]
-    );
+    )
 
     return (
       <div className="chat-input-container">
@@ -34,17 +34,17 @@ const ChatInput = memo(
           </button>
         </div>
       </div>
-    );
+    )
   },
   (prevProps, nextProps) => {
     // Solo re-renderizar si cambió el input o el estado de carga
     return (
       prevProps.value === nextProps.value &&
       prevProps.isLoading === nextProps.isLoading
-    );
+    )
   }
-);
+)
 
-ChatInput.displayName = "ChatInput";
+ChatInput.displayName = "ChatInput"
 
-export default ChatInput;
+export default ChatInput
